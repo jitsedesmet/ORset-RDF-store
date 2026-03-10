@@ -1,0 +1,11 @@
+# @base <https://base.jitsedesmet.be/> .
+@prefix CRDT: <https://rdf-set-crdt.knows.idlab.ugent.be/> .
+@prefix : <https://jitsedesmet.be/> .
+
+<> a CRDT:CONTAINER .
+
+:a :b :c .
+[] CRDT:TAGGING <<( :a :b :c )>> ;
+   CRDT:ADD "10591359-7b29-44f1-99df-e2e2bbf53adc"^^CRDT:DT_UUID ;
+   CRDT:DELETE "2010-06-21T11:28:01Z---b4074a77-f529-4bfc-95f5-008b2f777261"^^CRDT:DT_STAMP_UUID ;
+   DELETE "c269c6ec-b9b5-487e-aa93-f118b5af6842"^^CRDT:DT_UUID .

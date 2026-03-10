@@ -1,0 +1,4 @@
+<https://example.com/a> <https://example.com/b> <https://example.com/c> .
+_:b <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<( <https://example.com/a> <https://example.com/b> <https://example.com/c> )>>  .
+_:b <https://rdf-set-crdt.knows.idlab.ugent.be/add> "10591359-7b29-44f1-99df-e2e2bbf53adc"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
+_:b <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "c269c6ec-b9b5-487e-aa93-f118b5af6842"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .

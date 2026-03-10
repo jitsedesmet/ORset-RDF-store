@@ -1,0 +1,71 @@
+{
+  "name": "or-set-rdf-store",
+  "version": "0.0.0",
+  "description": "An ORset RDF store using RDF 1.2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jitsedesmet/add-wins-OR-set-RDF-datastore"
+  },
+  "bugs": {
+    "url": "https://github.com/jitsedesmet/add-wins-OR-set-RDF-datastore/issues"
+  },
+  "keywords": [
+    "OR-set",
+    "rdf-store",
+    "CRDT"
+  ],
+  "sideEffects": false,
+  "main": "lib/index.js",
+  "typings": "lib/index",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "lib/**/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.js.map"
+  ],
+  "scripts": {
+    "build": "yarn run build:ts",
+    "build:ts": "node \"node_modules/typescript/bin/tsc\"",
+    "clean": "git clean -dfx",
+    "test": "jest",
+    "lint": "eslint . --cache",
+    "lint-fix": "eslint . --fix",
+    "postinstall": "yarn husky && yarn run build"
+  },
+  "dependencies": {
+    "@traqula/algebra-transformations-1-2": "^1.0.3",
+    "@traqula/core": "^1.0.3",
+    "rdf-dereference": "^5.0.0",
+    "asynciterator": "^3.10.0",
+    "rdf-stores": "^2.2.0",
+    "n3": "2.0.0-beta.2",
+    "@comunica/utils-expression-evaluator": "^5.1.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@playwright/test": "^1.47.2",
+    "@types/n3": "^1.26.1",
+    "@types/node": "^24.10.0",
+    "depcheck": "^1.4.3",
+    "eslint": "^8.57.0",
+    "jest": "^29.5.0",
+    "jest-rdf": "^2.0.0",
+    "typescript": "^5.9.3",
+    "husky": "^9.0.0",
+    "ts-jest": "^29.0.5",
+
+    "serve-static": "^2.2.0",
+    "finalhandler": "^2.1.1",
+    "@types/serve-static": "^2.2.0",
+    "@types/finalhandler": "^1.2.4",
+    "express": "^5.2.1",
+    "@types/express": "^5.0.6",
+    "etag": "^1.8.1",
+    "@types/etag": "^1.8.4",
+    "ts-node": "^10.0.0"
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+}

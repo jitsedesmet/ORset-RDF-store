@@ -1,0 +1,2 @@
+_:2d62b00d-00b3-44f2-b901-a901e0c45714 <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<ex:s> <ex:p> <ex:o>)>> .
+_:2d62b00d-00b3-44f2-b901-a901e0c45714 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "cd3cf019-1705-4e24-bafd-43a91d13f2fe"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .

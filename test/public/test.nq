@@ -1,22 +1,8 @@
-_:c441906b-0d43-40ec-91e8-e3bf6e1fcca8 <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<https://jitsedesmet.be/a> <https://jitsedesmet.be/b> <https://jitsedesmet.be/c>)>> .
-_:c441906b-0d43-40ec-91e8-e3bf6e1fcca8 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "c269c6ec-b9b5-487e-aa93-f118b5af6842"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:c441906b-0d43-40ec-91e8-e3bf6e1fcca8 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "10591359-7b29-44f1-99df-e2e2bbf53adc"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:f907645d-f032-454c-ae24-94511b793375 <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<https://jitsedesmet.be/a> <https://jitsedesmet.be/a> <https://jitsedesmet.be/a>)>> .
-_:f907645d-f032-454c-ae24-94511b793375 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "e5ba879c-df6c-4ec8-a802-734429386b48"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:ae84be20-bb4d-4246-8720-61f2783bf801 <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<https://jitsedesmet.be/c> <https://jitsedesmet.be/c> <https://jitsedesmet.be/c>)>> .
-_:ae84be20-bb4d-4246-8720-61f2783bf801 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "87b92303-db56-4ebf-8e59-8b52aab6c335"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:ae84be20-bb4d-4246-8720-61f2783bf801 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "84dcb320-939a-4d8e-8849-009d3ee698f2"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<https://jitsedesmet.be/b> <https://jitsedesmet.be/b> <https://jitsedesmet.be/b>)>> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "15dd00c6-1e9a-4022-9e80-deec7901f44b"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "25246ac7-a8a8-47f2-9e44-6f4528aa7e28"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "b99106e4-4988-4be0-ace6-9694ef61f772"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "c12b49bb-097f-4f8b-a91b-f25c0ac83c6f"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "1e497bcd-9077-4c82-8b3d-6479e237a9de"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "bd7d771d-b810-4d6b-8c51-8ab60544d736"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "b797bf53-e16a-4e2f-ba47-1eb0ff6f4636"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "d4cd0b50-718a-41f1-9761-e79d4da26da4"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "705d68c0-3038-4632-9d8b-f70c6582c861"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "35fafd69-1da0-4efd-a8be-42ca3838739e"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:747bc4dd-b01f-47f4-ada8-aa2fc5b4c9ce <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "1a22fd54-2bd8-4e62-ae3b-5a3d31c1317a"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
-_:abeb1edd-08a2-4c8c-84a7-b4f53cfbf6a8 <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<https://jitsedesmet.be/d> <https://jitsedesmet.be/d> <https://jitsedesmet.be/d>)>> .
-_:abeb1edd-08a2-4c8c-84a7-b4f53cfbf6a8 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "a64c53f6-c004-4b9b-9806-e4c254d9866f"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
+_:dd8a9909-789e-4057-a188-9ca6f4fcbba6 <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<https://jitsedesmet.be/a> <https://jitsedesmet.be/a> <https://jitsedesmet.be/a>)>> .
+_:dd8a9909-789e-4057-a188-9ca6f4fcbba6 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "0b6bd7b3-4ebc-493d-950b-fdc5c081a275"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
+_:03bc2e0d-f750-4242-9588-dee3d1e4a3f9 <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<https://jitsedesmet.be/c> <https://jitsedesmet.be/c> <https://jitsedesmet.be/c>)>> .
+_:03bc2e0d-f750-4242-9588-dee3d1e4a3f9 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "12a4e507-9504-4246-b7c7-a5b908a594b9"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
+_:03bc2e0d-f750-4242-9588-dee3d1e4a3f9 <https://rdf-set-crdt.knows.idlab.ugent.be/delete> "46bb8696-752f-46f1-b45e-0e11ed250f8f"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
+_:cfbde05c-f570-4231-8f3b-78f5d30c41de <https://rdf-set-crdt.knows.idlab.ugent.be/tagging> <<(<https://jitsedesmet.be/b> <https://jitsedesmet.be/b> <https://jitsedesmet.be/b>)>> .
+_:cfbde05c-f570-4231-8f3b-78f5d30c41de <https://rdf-set-crdt.knows.idlab.ugent.be/add> "04b42c42-beb4-46d8-bfe3-89aa1a116c61"^^<https://rdf-set-crdt.knows.idlab.ugent.be/uuid> .
+<https://jitsedesmet.be/b> <https://jitsedesmet.be/b> <https://jitsedesmet.be/b> .

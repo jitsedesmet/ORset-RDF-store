@@ -1,12 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "include": [
-    "engines/**/*.ts",
-    "jest.config.ts",
-    "karma.conf.ts",
-    "karma.setup.ts",
-    "packages/**/*.ts",
-    "performance/**/*.ts"
+    "lib/**/*.ts",
+    "test/**/*.ts",
+    "jest.config.ts"
   ],
   "exclude": [
     "**/node_modules"

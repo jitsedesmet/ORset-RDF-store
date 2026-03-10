@@ -1,4 +1,5 @@
 import { writeFile, stat } from 'node:fs/promises';
+import type { Server } from 'node:http';
 import { join } from 'node:path';
 import type { RequestHandler } from 'express';
 
@@ -50,4 +51,10 @@ app.put('/test.nq', (async(req, res) => {
   });
 }) satisfies RequestHandler);
 app.use(serveStatic(__dirname));
-app.listen(3000);
+
+export function startServer(port = 3000): Promise<Server> {
+  return new Promise((resolve, reject) => {
+    const server = app.listen(port, () => resolve(server));
+    server.on('error', reject);
+  });
+}

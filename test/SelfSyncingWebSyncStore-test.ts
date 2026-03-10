@@ -45,7 +45,6 @@ describe('Web Synced Store auto', () => {
     await expect(getIter(crdt2).toArray()).resolves.toHaveLength(1);
 
     await Promise.all([ addAto1, addBto1, addCto1, addCto2, delAfrom1, delCfrom1 ]);
-    crdt1.webSyncInterval = 0;
-    crdt2.webSyncInterval = 0;
+    await Promise.all([ crdt1.stop(), crdt2.stop() ]);
   });
 });

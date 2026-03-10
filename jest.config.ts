@@ -23,6 +23,8 @@ const config: Config.InitialOptions = {
   },
   // The default test timeout is not enough for engine tests, but is enough for packages
   testTimeout: 20_000,
+  globalSetup: '<rootDir>/test/globalSetup.ts',
+  globalTeardown: '<rootDir>/test/globalTeardown.ts',
 };
 
 export default config;

@@ -23,6 +23,8 @@ const config: Config.InitialOptions = {
   },
   // The default test timeout is not enough for engine tests, but is enough for packages
   testTimeout: 20_000,
+  // Run all test suites serially so the two web-server suites never run in parallel.
+  maxWorkers: 1,
   globalSetup: '<rootDir>/test/globalSetup.ts',
   globalTeardown: '<rootDir>/test/globalTeardown.ts',
 };

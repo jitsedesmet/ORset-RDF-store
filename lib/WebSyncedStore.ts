@@ -47,8 +47,8 @@ export class WebSyncedStore extends CrdtStore {
         try {
           await this.pullData();
           await this.pushData();
-        } catch (error) {
-          console.error(error);
+        } catch {
+          // Transient sync errors are tolerated; the loop will retry on the next interval.
         }
         this.registerWebPromise();
       })().catch((err) => {
@@ -84,11 +84,11 @@ export class WebSyncedStore extends CrdtStore {
     }
     let text = await new Promise<string>((resolve, reject) => writer
       .end((error: any, result: any) => {
-      if (error) {
-        reject(error);
-      }
-      resolve(result);
-    }));
+        if (error) {
+          reject(error);
+        }
+        resolve(result);
+      }));
     // TODO: this is only a temporary fix because N3 generator is wrong.
     text = text.replaceAll('<<', '<<(');
     // >>> -> >)>> : >>> -> >>> -> >>)> -> >)>>

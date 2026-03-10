@@ -1,6 +1,7 @@
+// eslint-disable-next-line import/no-nodejs-modules
 import type { EventEmitter } from 'node:events';
+import type { ITimeZoneRepresentation } from '@comunica/types';
 import type { Term } from '@rdfjs/types';
-import {ITimeZoneRepresentation} from "@comunica/types";
 
 export function eventToPromise(event: EventEmitter): Promise<void> {
   return new Promise((resolve, reject) =>
@@ -17,7 +18,6 @@ export function extractTimeZone(date: Date): ITimeZoneRepresentation {
     zoneMinutes: date.getTimezoneOffset() % 60,
   };
 }
-
 
 export const prefixCrdt = 'https://rdf-set-crdt.knows.idlab.ugent.be/';
 

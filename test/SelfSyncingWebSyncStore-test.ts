@@ -9,6 +9,10 @@ import { getIter, getStoreIter } from './utils';
 describe('Web Synced Store auto', () => {
   const DF = new DataFactoryUuid();
 
+  beforeAll(async() => {
+    await fetch('http://localhost:3000/reset', { method: 'POST' });
+  });
+
   it('store A and B can work independently and over time will sync', async() => {
     const DF1 = new DataFactoryUuid();
     const DF2 = new DataFactoryUuid();

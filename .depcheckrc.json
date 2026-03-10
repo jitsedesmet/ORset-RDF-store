@@ -1,0 +1,14 @@
+{
+  "ignores": [
+    "@comunica/utils-expression-evaluator",
+    "@playwright/test",
+    "@traqula/algebra-transformations-1-2",
+    "@traqula/core",
+    "@types/jest",
+    "@types/n3",
+    "depcheck",
+    "n3",
+    "rdf-dereference",
+    "ts-node"
+  ]
+}

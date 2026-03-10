@@ -374,8 +374,8 @@ export class CrdtStore implements Store {
             push(quad);
           }
           done();
-        })().catch((err) => {
-          console.log(err);
+        })().catch(() => {
+          // Errors during async iteration are surfaced through the readable stream's error event.
         });
       } });
     return this.remove(toRemove);

@@ -7,4 +7,3 @@ Exposes an RDF store, compatible with `@rdfjs/types` store that implements an OR
 ```bash
 $ yarn add or-set-rdf-store
 ```
-

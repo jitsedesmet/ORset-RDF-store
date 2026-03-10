@@ -9,6 +9,10 @@ import { getIter, getStoreIter } from './utils';
 describe('Web Synced Store', () => {
   const DF = new DataFactoryUuid();
 
+  beforeAll(async() => {
+    await fetch('http://localhost:3000/reset', { method: 'POST' });
+  });
+
   it('Single store communication', async() => {
     const clearCrdt = new WebSyncedStore({ dataFactory: DF, webSource: 'http://localhost:3000/test.nq' });
     await clearCrdt.pullData();

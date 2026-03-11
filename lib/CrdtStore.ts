@@ -1,19 +1,19 @@
 /* eslint-disable import/no-nodejs-modules */
 import { EventEmitter } from 'node:events';
 import type { ITimeZoneRepresentation } from '@comunica/types';
-import {
-  addDurationToDateTime,
-  defaultedDurationRepresentation,
-  parseDateTime,
-  toDateTimeRepresentation,
-  toUTCDate,
-  DateTimeLiteral,
-} from '@comunica/utils-expression-evaluator';
 import type { Quad, Store, Stream, Term } from '@rdfjs/types';
 import type { AsyncIterator } from 'asynciterator';
 import { wrap } from 'asynciterator';
 import { RdfStore } from 'rdf-stores';
 import type { DataFactoryUuid } from './DataFactoryUuid';
+import {
+  addDurationToDateTime,
+  defaultedDurationRepresentation,
+  parseDateTime,
+  serializeDateTime,
+  toDateTimeRepresentation,
+  toUTCDate,
+} from './dateTimeHelpers';
 import { attachEvent, CRDT, eventToPromise, prefixCrdt, termString, extractTimeZone } from './utils';
 
 export interface CrdtStoreArgs {
@@ -131,7 +131,7 @@ export class CrdtStore implements Store {
       const store = this.store;
       const now = this.now();
       const timezone = extractTimeZone(now);
-      const nowAsString = new DateTimeLiteral(toDateTimeRepresentation({ date: now, timeZone: timezone })).str();
+      const nowAsString = serializeDateTime(toDateTimeRepresentation({ date: now, timeZone: timezone }));
       // Should remove the item itself, remove the add labels, and make remove labels with the same subj and pred
       const dataStream = wrap(stream).clone();
       const metaDataTriples = dataStream.clone()

@@ -1,8 +1,8 @@
 {
-  "name": "or-set-rdf-store",
+  "name": "orset-rdf-store",
   "version": "0.0.0",
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
-  "description": "An ORset RDF store using RDF 1.2",
+  "description": "A proof-of-concept RDFjs-compliant triple store with state-based OR-Set (add-wins) CRDT semantics, enabling conflict-free concurrent writes to RDF datasets over HTTP",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,9 +12,15 @@
     "url": "https://github.com/jitsedesmet/add-wins-OR-set-RDF-datastore/issues"
   },
   "keywords": [
-    "OR-set",
-    "rdf-store",
-    "CRDT"
+    "rdf",
+    "rdfjs",
+    "crdt",
+    "or-set",
+    "conflict-free",
+    "offline-first",
+    "rdf-1.2",
+    "triple-store",
+    "eventual-consistency"
   ],
   "sideEffects": false,
   "main": "lib/index.js",
@@ -38,11 +44,8 @@
   },
   "dependencies": {
     "@comunica/utils-expression-evaluator": "^5.1.3",
-    "@traqula/algebra-transformations-1-2": "^1.0.3",
-    "@traqula/core": "^1.0.3",
     "asynciterator": "^3.10.0",
     "n3": "2.0.0-beta.2",
-    "rdf-dereference": "^5.0.0",
     "rdf-stores": "^2.2.0"
   },
   "devDependencies": {

@@ -65,21 +65,19 @@ app.put('/test.nq', (async(req, res) => {
   });
 }) satisfies RequestHandler);
 
-// Reset the in-memory state to the original test.nq content.
-// Call this in beforeAll() of any test suite that uses the web server.
-app.post('/reset', (async(_req, res) => {
-  try {
-    await resetFromFile();
-    res.status(200).end();
-  } catch (error) {
-    res.status(500).send(`Reset failed: ${error instanceof Error ? error.message : String(error)}`);
-  }
-}) satisfies RequestHandler);
+export const TEST_SERVER_PORT = 3000;
 
-export async function startServer(port = 3000): Promise<Server> {
+export async function startServer(port = TEST_SERVER_PORT): Promise<Server> {
+  // Always reload from file so each suite starts in the canonical test.nq state.
   await resetFromFile();
   return new Promise((resolve, reject) => {
     const server = app.listen(port, () => resolve(server));
     server.on('error', reject);
+  });
+}
+
+export function stopServer(server: Server): Promise<void> {
+  return new Promise((resolve, reject) => {
+    server.close(err => (err ? reject(err) : resolve()));
   });
 }

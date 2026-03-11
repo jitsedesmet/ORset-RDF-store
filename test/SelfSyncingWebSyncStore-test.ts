@@ -1,22 +1,29 @@
+import type { Server } from 'node:http';
 import { wrap } from 'asynciterator';
 import { RdfStore } from 'rdf-stores';
 import { DataFactoryUuid } from '../lib/DataFactoryUuid';
 import { eventToPromise } from '../lib/utils';
 import { WebSyncedStore } from '../lib/WebSyncedStore';
 import { prefix } from './data';
+import { startServer, stopServer, TEST_SERVER_PORT } from './public/webserver';
 import { getIter, getStoreIter } from './utils';
 
 describe('Web Synced Store auto', () => {
   const DF = new DataFactoryUuid();
+  let server: Server;
 
   beforeAll(async() => {
-    await fetch('http://localhost:3000/reset', { method: 'POST' });
+    server = await startServer(TEST_SERVER_PORT);
+  });
+
+  afterAll(async() => {
+    await stopServer(server);
   });
 
   it('store A and B can work independently and over time will sync', async() => {
     const DF1 = new DataFactoryUuid();
     const DF2 = new DataFactoryUuid();
-    const crdtClear = new WebSyncedStore({ dataFactory: DF1, webSource: 'http://localhost:3000/test.nq' });
+    const crdtClear = new WebSyncedStore({ dataFactory: DF1, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
     // Clear server completely
     await crdtClear.pullData();
     (<any> crdtClear).store = RdfStore.createDefault();
@@ -24,8 +31,8 @@ describe('Web Synced Store auto', () => {
     await expect(getStoreIter(crdtClear).toArray()).resolves.toHaveLength(0);
 
     // Our two crdt's that will talk
-    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: 'http://localhost:3000/test.nq', webSyncInterval: 100 });
-    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: 'http://localhost:3000/test.nq', webSyncInterval: 150 });
+    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq`, webSyncInterval: 100 });
+    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq`, webSyncInterval: 150 });
     const longTime = 1000;
 
     const testTripleA = DF.quad(DF.namedNode(`${prefix}a`), DF.namedNode(`${prefix}a`), DF.namedNode(`${prefix}a`));

@@ -25,8 +25,6 @@ const config: Config.InitialOptions = {
   testTimeout: 20_000,
   // Run all test suites serially so the two web-server suites never run in parallel.
   maxWorkers: 1,
-  globalSetup: '<rootDir>/test/globalSetup.ts',
-  globalTeardown: '<rootDir>/test/globalTeardown.ts',
 };
 
 export default config;

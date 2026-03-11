@@ -1,27 +1,34 @@
+import type { Server } from 'node:http';
 import { wrap } from 'asynciterator';
 import { RdfStore } from 'rdf-stores';
 import { DataFactoryUuid } from '../lib/DataFactoryUuid';
 import { eventToPromise } from '../lib/utils';
 import { WebSyncedStore } from '../lib/WebSyncedStore';
 import { basicTestContent, prefix } from './data';
+import { startServer, stopServer, TEST_SERVER_PORT } from './public/webserver';
 import { getIter, getStoreIter } from './utils';
 
 describe('Web Synced Store', () => {
   const DF = new DataFactoryUuid();
+  let server: Server;
 
   beforeAll(async() => {
-    await fetch('http://localhost:3000/reset', { method: 'POST' });
+    server = await startServer(TEST_SERVER_PORT);
+  });
+
+  afterAll(async() => {
+    await stopServer(server);
   });
 
   it('Single store communication', async() => {
-    const clearCrdt = new WebSyncedStore({ dataFactory: DF, webSource: 'http://localhost:3000/test.nq' });
+    const clearCrdt = new WebSyncedStore({ dataFactory: DF, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
     await clearCrdt.pullData();
     const store = RdfStore.createDefault();
     await eventToPromise(store.import(basicTestContent(DF)));
     (<any>clearCrdt).store = store;
     await clearCrdt.pushData();
 
-    const crdt = new WebSyncedStore({ dataFactory: DF, webSource: 'http://localhost:3000/test.nq' });
+    const crdt = new WebSyncedStore({ dataFactory: DF, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
     await crdt.pullData();
     await expect(getStoreIter(crdt).toArray()).resolves.toHaveLength(4);
 
@@ -31,13 +38,13 @@ describe('Web Synced Store', () => {
   it('store B can remove what A has created', async() => {
     const DF1 = new DataFactoryUuid();
     const DF2 = new DataFactoryUuid();
-    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: 'http://localhost:3000/test.nq' });
+    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
     // Clear server
     await crdt1.pullData();
     await eventToPromise(crdt1.removeMatches());
     await crdt1.pushData();
     await expect(getIter(crdt1).toArray()).resolves.toHaveLength(0);
-    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: 'http://localhost:3000/test.nq' });
+    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
 
     // 1 makes, sends, 2 fetches and removes, 1 fetches and is removed
     // Test would fail using merge: if I or server has, I has (naive add-wins).
@@ -57,8 +64,8 @@ describe('Web Synced Store', () => {
     // Remote is now empty.
     const DF1 = new DataFactoryUuid();
     const DF2 = new DataFactoryUuid();
-    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: 'http://localhost:3000/test.nq' });
-    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: 'http://localhost:3000/test.nq' });
+    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
+    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
     await crdt1.pullData();
     await crdt2.pullData();
 
@@ -83,8 +90,8 @@ describe('Web Synced Store', () => {
     // Remote is now empty.
     const DF1 = new DataFactoryUuid();
     const DF2 = new DataFactoryUuid();
-    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: 'http://localhost:3000/test.nq' });
-    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: 'http://localhost:3000/test.nq' });
+    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
+    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
     await crdt1.pullData();
     await crdt2.pullData();
 
@@ -111,13 +118,13 @@ describe('Web Synced Store', () => {
     // Remote is now empty.
     const DF1 = new DataFactoryUuid();
     const DF2 = new DataFactoryUuid();
-    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: 'http://localhost:3000/test.nq' });
+    const crdt1 = new WebSyncedStore({ dataFactory: DF1, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
     // Clear server
     await crdt1.pullData();
     await eventToPromise(crdt1.removeMatches());
     await crdt1.pushData();
     await expect(getIter(crdt1).toArray()).resolves.toHaveLength(0);
-    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: 'http://localhost:3000/test.nq' });
+    const crdt2 = new WebSyncedStore({ dataFactory: DF2, webSource: `http://localhost:${TEST_SERVER_PORT}/test.nq` });
     await crdt1.pullData();
     await crdt2.pullData();
 

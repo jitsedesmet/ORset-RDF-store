@@ -1,5 +1,6 @@
 {
   "ignores": [
+    "@comunica/query-sparql",
     "@comunica/utils-expression-evaluator",
     "@playwright/test",
     "@traqula/algebra-transformations-1-2",

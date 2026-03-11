@@ -77,6 +77,8 @@ export async function startServer(port = TEST_SERVER_PORT): Promise<Server> {
 }
 
 export function stopServer(server: Server): Promise<void> {
+  // Force-close keep-alive connections so Jest can exit cleanly.
+  server.closeAllConnections();
   return new Promise((resolve, reject) => {
     server.close(err => (err ? reject(err) : resolve()));
   });

@@ -5,7 +5,7 @@ import { RdfStore } from 'rdf-stores';
 import { DataFactoryUuid } from '../lib/DataFactoryUuid';
 import { WebSyncedStore } from '../lib/WebSyncedStore';
 import { startServer, stopServer, TEST_SERVER_PORT } from './public/webserver';
-import { getIter, getStoreIter } from './utils';
+import { getIter, getStoreIter, promiseWait } from './utils';
 
 const webSource = `http://localhost:${TEST_SERVER_PORT}/test.nq`;
 
@@ -35,10 +35,6 @@ describe('System test: QuerySparql', () => {
     (<any> crdtClear).store = RdfStore.createDefault();
     await crdtClear.pushData();
     await expect(getStoreIter(crdtClear).toArray()).resolves.toHaveLength(0);
-  }
-
-  function promiseWait(time: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, time));
   }
 
   it('two stores syncing data', async() => {

@@ -30,3 +30,7 @@ export function termString(term: Term): string {
 export function compareTerm(a: Term, b: Term): number {
   return termString(a).localeCompare(termString(b));
 }
+
+export function promiseWait(time: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, time));
+}

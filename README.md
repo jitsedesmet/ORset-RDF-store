@@ -5,8 +5,6 @@
 
 A proof-of-concept **[RDFjs](https://rdf.js.org/)**-compliant RDF triple store that implements an **add-wins OR-Set CRDT**, enabling conflict-free concurrent writes to RDF datasets over HTTP with eventual consistency.
 
-> **Background:** This work is described in the paper [_Add-Wins OR-Set RDF Datastore_](https://2026-icwe-poster.jitsedesmet.be/), which provides a detailed explanation of the motivation and design decisions.
-
 ---
 
 ## Table of Contents
@@ -40,7 +38,6 @@ The core idea is the **OR-Set** (Observed-Remove Set) CRDT:
 - Every added triple is tagged with a unique identifier (UUID).
 - Removing a triple records the UUIDs of all add-tags that were known at removal time.
 - When two replicas merge, a triple survives if and only if at least one of its add-tags is **not** covered by a removal. This gives **add-wins** semantics: concurrent add and remove of the same triple always keeps the triple.
-- Merge is **commutative**, **associative**, and **idempotent**, so replicas always converge regardless of the order or number of sync operations.
 
 The metadata required by the CRDT is stored inline inside the RDF dataset using **RDF 1.2 triple terms** (quoted triples), keeping the representation self-contained in a single RDF document.
 
@@ -48,14 +45,14 @@ The metadata required by the CRDT is stored inline inside the RDF dataset using 
 
 ## Key Concepts
 
-| Term | Meaning |
-|------|---------|
-| **CRDT** | Conflict-free Replicated Data Type – a data structure that can be merged without coordination |
-| **OR-Set** | Observed-Remove Set – an add-wins variant of a CRDT set |
-| **Add-wins** | When an add and a remove of the same element happen concurrently, the add takes precedence |
+| Term            | Meaning                                                                                                                |
+|-----------------|------------------------------------------------------------------------------------------------------------------------|
+| **CRDT**        | Conflict-free Replicated Data Type – a data structure that can be merged without coordination                          |
+| **OR-Set**      | Observed-Remove Set – an add-wins variant of a CRDT set                                                                |
+| **Add-wins**    | When an add and a remove of the same element happen concurrently, the add takes precedence                             |
 | **Triple term** | An RDF 1.2 feature that allows an entire triple (subject, predicate, object) to appear as the object of another triple |
-| **Tombstone** | A deletion marker that is kept until all peers have observed the removal |
-| **ETag** | HTTP mechanism used to detect mid-air collisions when pushing data to a server |
+| **Tombstone**   | A deletion marker that is kept until all peers have observed the removal                                               |
+| **ETag**        | HTTP mechanism used to detect mid-air collisions when pushing data to a server                                         |
 
 ---
 
@@ -302,65 +299,6 @@ await store.stop();
 
 ## API
 
-### CrdtStore
-
-```typescript
-import { CrdtStore } from 'orset-rdf-store';
-```
-
-Main CRDT store class. Implements the RDFjs `Store` interface.
-
-#### Constructor
-
-```typescript
-new CrdtStore(args: CrdtStoreArgs)
-```
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `dataFactory` | `DataFactoryUuid` | required | Data factory used to create RDF terms and blank nodes. **Must** be `DataFactoryUuid` so that blank-node identifiers are globally unique (UUIDs). |
-| `initialCrdtState` | `AsyncIterator<Quad>` | `undefined` | Optional pre-existing CRDT state (including metadata quads) to bootstrap the store. |
-| `now` | `() => Date` | `() => new Date()` | Clock function. Useful for testing or deterministic scenarios. |
-| `expirationDuration` | `number` (seconds) | `0` (never) | How long to keep timestamped tombstones before discarding them during a merge. `0` or negative means tombstones are kept forever. See [Tombstone Expiration](#tombstone-expiration). |
-
-#### Methods
-
-| Method | Description |
-|--------|-------------|
-| `import(stream: Stream): EventEmitter` | Add triples from a stream. Each triple receives a fresh add-tag (UUID). Returns an `EventEmitter` that emits `end` on completion. |
-| `remove(stream: Stream): EventEmitter` | Remove triples. Converts existing add-tags into remove-tags. Returns an `EventEmitter`. |
-| `removeMatches(s?, p?, o?, g?): EventEmitter` | Remove all triples matching a pattern (supports wildcard `null`/`undefined`). |
-| `match(s?, p?, o?, g?): Stream` | Return a stream of **data** triples (CRDT metadata is hidden). |
-| `deleteGraph(graph): EventEmitter` | Remove all triples in a named graph. |
-| `crdtMerge(otherStore: Store): EventEmitter` | Merge another store into this one using OR-Set semantics. Must be called on both stores to achieve a bidirectional sync. |
-| `crdtMergeGraph(newStore, otherStore, graph): Promise<void>` | Low-level merge for a single graph. Called internally by `crdtMerge`. |
-| `cleanTaggers(): EventEmitter` | Remove orphaned tagging metadata (taggers with no add/delete labels). Useful for garbage collection after tombstone expiration. |
-| `sequentializeEvent(callback): EventEmitter` | Internal helper that serializes asynchronous operations. |
-
-### WebSyncedStore
-
-```typescript
-import { WebSyncedStore } from 'orset-rdf-store/lib/WebSyncedStore';
-```
-
-Extends `CrdtStore` with automatic HTTP synchronization via pull/push cycles.
-
-#### Additional constructor options
-
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `webSource` | `string` | required | URL of the remote RDF document (N-Quads format). |
-| `webSyncInterval` | `number` (ms) | `0` (disabled) | Interval in milliseconds between automatic sync cycles. Set to `0` to disable automatic sync and drive it manually. |
-| `fetch` | `typeof fetch` | global `fetch` | Custom fetch implementation (useful for testing or environments without a global `fetch`). |
-
-#### Additional methods
-
-| Method | Description |
-|--------|-------------|
-| `pullData(): Promise<void>` | Fetch the remote document, merge it into the local store, and record the server ETag. |
-| `pushData(): Promise<void>` | Serialize the local store and `PUT` it to the server using the conditional `If-Match` ETag header to prevent mid-air collisions. Retries are handled by the next sync cycle. |
-| `stop(): Promise<void>` | Disable automatic sync and wait for the current sync cycle to finish. Call before exiting to allow the process to terminate cleanly. |
-
 ### DataFactoryUuid
 
 ```typescript
@@ -377,16 +315,16 @@ import { CRDT } from 'orset-rdf-store';
 
 The `CRDT` enum exposes the URIs used for CRDT metadata predicates and datatypes:
 
-| Constant | URI | Description |
-|----------|-----|-------------|
-| `CRDT.CONTAINER` | `…/container` | Type of a CRDT-managed document |
-| `CRDT.TAGGING` | `…/tagging` | Links a blank-node tagger to the triple term it tracks |
-| `CRDT.ADD` | `…/add` | Add-tag: UUID literal identifying one "add" of a triple |
-| `CRDT.DELETE` | `…/delete` | Remove-tag: UUID (or stamped UUID) literal identifying one "remove" |
-| `CRDT.DT_UUID` | `…/uuid` | Datatype for a plain UUID add/remove tag |
-| `CRDT.DT_STAMP_UUID` | `…/stamp-uuid` | Datatype for a timestamped UUID remove-tag (used when `expirationDuration > 0`) |
+| Constant             | URI               | Description                                                                     |
+|----------------------|-------------------|---------------------------------------------------------------------------------|
+| `CRDT.CONTAINER`     | `crdt:container`  | Type of a CRDT-managed document                                                 |
+| `CRDT.TAGGING`       | `crdt:tagging`    | Links a blank-node tagger to the triple term it tracks                          |
+| `CRDT.ADD`           | `crdt:add`        | Add-tag: UUID literal identifying one "add" of a triple                         |
+| `CRDT.DELETE`        | `crdt:delete`     | Remove-tag: UUID (or stamped UUID) literal identifying one "remove"             |
+| `CRDT.DT_UUID`       | `crdt:uuid`       | Datatype for a plain UUID add/remove tag                                        |
+| `CRDT.DT_STAMP_UUID` | `crdt:stamp-uuid` | Datatype for a timestamped UUID remove-tag (used when `expirationDuration > 0`) |
 
-All URIs share the base `https://rdf-set-crdt.knows.idlab.ugent.be/`.
+With the prefix `crdt:` resolving to `https://rdf-set-crdt.knows.idlab.ugent.be/`.
 
 ---
 
@@ -409,6 +347,7 @@ _:tagger  crdt:delete  "07d9c9a0-3e54-4e2a-ab1e-000000000001"^^crdt:uuid .
 ```
 
 A triple is **visible** (returned by `match()`) if and only if at least one of its add-tags is **not** referenced by any of its remove-tags.
+In practice, the `crdt:add` triple gets removed since it contains no additional information.
 
 The N-Quads serialization of this structure is what gets stored on the server and exchanged between replicas.
 
@@ -428,7 +367,9 @@ A minimal reference implementation (used in the test suite) can be found in [`te
 
 ## Tombstone Expiration
 
-Without tombstone expiration, removed triples leave behind permanent delete-tags. This prevents the store from growing unboundedly in long-lived deployments. You can enable expiration by providing an `expirationDuration` (in seconds):
+Without tombstone expiration, removed triples leave behind permanent delete-tags.
+This prevents the store from growing unboundedly in long-lived deployments.
+You can enable expiration by providing an `expirationDuration` (in seconds):
 
 ```typescript
 const store = new CrdtStore({
@@ -443,7 +384,7 @@ When `expirationDuration > 0`:
 - During `crdtMerge`, remove-tags older than `expirationDuration` are silently discarded.
 - After discarding, orphaned taggers can be cleaned up with `cleanTaggers()`.
 
-> **Important:** To guarantee correctness, `expirationDuration` must be at least **2× the sync interval** plus a safety margin for clock drift and network latency. If a tombstone expires before all peers have seen it, a previously deleted triple may reappear.
+> **Important:** To guarantee correctness, `expirationDuration` must be at least **the sync interval + 4000s** as a safety margin for clock drift. If a tombstone expires before all peers have seen it, a previously deleted triple may reappear.
 
 ---
 
@@ -452,9 +393,7 @@ When `expirationDuration > 0`:
 - **Proof of concept:** This library is not production-hardened. It is intended to demonstrate the feasibility of OR-Set CRDTs for RDF datasets.
 - **In-memory only:** The underlying store is held in memory. There is currently no persistence layer.
 - **N-Quads serialization only:** `WebSyncedStore` serializes data as N-Quads. Other RDF serializations are not supported for the sync protocol.
-- **N3.js serialization bug workaround:** The library includes a temporary workaround for an N3.js issue with RDF 1.2 triple-term serialization (`<<(…)>>`).
 - **No access control:** The library does not implement any authentication or authorization. Securing the HTTP endpoint is left to the deployment.
-- **Named graphs:** All graphs present in the dataset are merged independently. Cross-graph dependencies are not handled.
 
 ---
 

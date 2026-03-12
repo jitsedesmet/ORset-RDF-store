@@ -13,13 +13,11 @@ A proof-of-concept **[RDFjs](https://rdf.js.org/)**-compliant RDF triple store t
 - [Key Concepts](#key-concepts)
 - [Install](#install)
 - [Quickstart](#quickstart)
+  - [Querying with SPARQL (Comunica)](#querying-with-sparql-comunica)
   - [Basic usage – add and remove triples](#basic-usage--add-and-remove-triples)
   - [Merging two local stores (offline-first)](#merging-two-local-stores-offline-first)
   - [Web-synced store (automatic HTTP synchronization)](#web-synced-store-automatic-http-synchronization)
-  - [Querying with SPARQL (Comunica)](#querying-with-sparql-comunica)
 - [API](#api)
-  - [CrdtStore](#crdtstore)
-  - [WebSyncedStore](#websyncedstore)
   - [DataFactoryUuid](#datafactoryuuid)
   - [CRDT vocabulary constants](#crdt-vocabulary-constants)
 - [Internal Data Model](#internal-data-model)
@@ -69,6 +67,51 @@ yarn add orset-rdf-store
 ## Quickstart
 
 All examples use TypeScript. The package ships compiled JavaScript so plain JavaScript works identically.
+
+### Querying with SPARQL (Comunica)
+
+`CrdtStore` implements the `@rdfjs/types` `Store` interface, so it works as both a source and a destination for the [Comunica](https://comunica.dev/) query engine.
+
+```typescript
+import { QueryEngine } from '@comunica/query-sparql';
+import type * as RDF from '@rdfjs/types';
+import { WebSyncedStore } from 'orset-rdf-store/lib/WebSyncedStore';
+import { DataFactoryUuid } from 'orset-rdf-store/lib/DataFactoryUuid';
+
+const engine = new QueryEngine();
+const store = new WebSyncedStore({
+  dataFactory: new DataFactoryUuid(),
+  webSource: 'https://my-pod.example/data.nq',
+  webSyncInterval: 2_000,
+});
+
+// Wait for initial sync
+await new Promise(resolve => setTimeout(resolve, 3_000));
+
+// INSERT via SPARQL
+const insert = await engine.query<RDF.QueryVoid>(`
+  INSERT DATA {
+    <https://example.org/Alice> <https://example.org/knows> <https://example.org/Bob> .
+  }
+`, { sources: [store], destination: store });
+await insert.execute();
+
+// SELECT via SPARQL
+const bindingsStream = await engine.queryBindings(`SELECT * { ?s ?p ?o }`, {
+  sources: [store],
+});
+const bindings = await bindingsStream.toArray();
+console.log(bindings.length); // 1
+
+// DELETE via SPARQL
+const del = await engine.query<RDF.QueryVoid>(`DELETE WHERE { ?s ?p ?o }`, {
+  sources: [store],
+  destination: store,
+});
+await del.execute();
+
+await store.stop();
+```
 
 ### Basic usage – add and remove triples
 
@@ -248,51 +291,6 @@ await new Promise<void>((resolve, reject) =>
 
 // Push the merged state back to the server
 await store.pushData();
-```
-
-### Querying with SPARQL (Comunica)
-
-`CrdtStore` implements the `@rdfjs/types` `Store` interface, so it works as both a source and a destination for the [Comunica](https://comunica.dev/) query engine.
-
-```typescript
-import { QueryEngine } from '@comunica/query-sparql';
-import type * as RDF from '@rdfjs/types';
-import { WebSyncedStore } from 'orset-rdf-store/lib/WebSyncedStore';
-import { DataFactoryUuid } from 'orset-rdf-store/lib/DataFactoryUuid';
-
-const engine = new QueryEngine();
-const store = new WebSyncedStore({
-  dataFactory: new DataFactoryUuid(),
-  webSource: 'https://my-pod.example/data.nq',
-  webSyncInterval: 2_000,
-});
-
-// Wait for initial sync
-await new Promise(resolve => setTimeout(resolve, 3_000));
-
-// INSERT via SPARQL
-const insert = await engine.query<RDF.QueryVoid>(`
-  INSERT DATA {
-    <https://example.org/Alice> <https://example.org/knows> <https://example.org/Bob> .
-  }
-`, { sources: [store], destination: store });
-await insert.execute();
-
-// SELECT via SPARQL
-const bindingsStream = await engine.queryBindings(`SELECT * { ?s ?p ?o }`, {
-  sources: [store],
-});
-const bindings = await bindingsStream.toArray();
-console.log(bindings.length); // 1
-
-// DELETE via SPARQL
-const del = await engine.query<RDF.QueryVoid>(`DELETE WHERE { ?s ?p ?o }`, {
-  sources: [store],
-  destination: store,
-});
-await del.execute();
-
-await store.stop();
 ```
 
 ---
